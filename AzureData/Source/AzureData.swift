@@ -369,17 +369,29 @@ public func delete (triggerWithId triggerId: String, fromCollection collectionId
     return DocumentClient.default.delete(triggerWithId: triggerId, fromCollection: collectionId, inDatabase: databaseId, callback: callback)
 }
 
+public func delete (_ trigger: Trigger, fromCollection collectionId: String, inDatabase databaseId: String, callback: @escaping (DataResponse) -> ()) {
+    return DocumentClient.default.delete(documentWithId: trigger.id, fromCollection: collectionId, inDatabase: databaseId, callback: callback)
+}
+
+public func delete (_ trigger: Trigger, fromCollection collection: DocumentCollection, callback: @escaping (DataResponse) -> ()) {
+    return DocumentClient.default.delete(triggerWithId: trigger.id, fromCollection: collection, callback: callback)
+}
+
 public func delete (triggerWithId triggerId: String, fromCollection collection: DocumentCollection, callback: @escaping (DataResponse) -> ()) {
     return DocumentClient.default.delete(triggerWithId: triggerId, fromCollection: collection, callback: callback)
 }
 
 // replace
+public func replace (_ trigger: Trigger, inCollection collection: DocumentCollection, callback: @escaping (Response<Trigger>) -> ()) {
+    return DocumentClient.default.replace(trigger, inCollection: collection, callback: callback)
+}
+
 public func replace (triggerWithId triggerId: String, operation: Trigger.TriggerOperation, type triggerType: Trigger.TriggerType, andBody triggerBody: String, inCollection collectionId: String, inDatabase databaseId: String, callback: @escaping (Response<Trigger>) -> ()) {
     return DocumentClient.default.replace (triggerWithId: triggerId, operation: operation, type: triggerType, andBody: triggerBody, inCollection: collectionId, inDatabase: databaseId, callback: callback)
 }
 
-public func replace (triggerWithId triggerId: String, operation: Trigger.TriggerOperation, type triggerType: Trigger.TriggerType, andBody triggerBody: String, in collection: DocumentCollection, callback: @escaping (Response<Trigger>) -> ()) {
-    return DocumentClient.default.replace (triggerWithId: triggerId, operation: operation, type: triggerType, andBody: triggerBody, in: collection, callback: callback)
+public func replace (triggerWithId triggerId: String, triggerResourceId: String, operation: Trigger.TriggerOperation, type triggerType: Trigger.TriggerType, andBody triggerBody: String, in collection: DocumentCollection, callback: @escaping (Response<Trigger>) -> ()) {
+    return DocumentClient.default.replace (triggerWithId: triggerId, triggerResourceId: triggerResourceId, operation: operation, type: triggerType, andBody: triggerBody, in: collection, callback: callback)
 }
 
 

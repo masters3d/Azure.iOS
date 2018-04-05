@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import AzureData
 
 class CollectionTriggerExtensionsTests: AzureDataTests {
     
@@ -21,13 +22,57 @@ class CollectionTriggerExtensionsTests: AzureDataTests {
     override func tearDown() { super.tearDown() }
     
     
-    //func testTriggerCrud() {
-    
-    //var createResponse:     Response<Trigger>?
-    //var listResponse:       ListResponse<Trigger>?
-    //var getResponse:        Response<Trigger>?
-    //var replaceResponse:    Response<Trigger>?
-    //var queryResponse:      ListResponse<Trigger>?
-    
-    //}
+    func testTriggerCrud() {
+
+        var createResponse:     Response<Trigger>?
+        var listResponse:       ListResponse<Trigger>?
+        var replaceResponse:    Response<Trigger>?
+        var deleteResponse:     DataResponse?
+
+
+        // Create
+        collection!.create(triggerWithId: resourceId, operation: .all, type: .post, andBody: "function updateMetadata()") { r in
+            createResponse = r
+            self.createExpectation.fulfill()
+        }
+
+        wait(for: [createExpectation], timeout: timeout)
+
+        XCTAssertNotNil(createResponse?.resource)
+
+
+
+        // List
+        collection!.getTriggers { r in
+            listResponse = r
+            self.listExpectation.fulfill()
+        }
+
+        wait(for: [listExpectation], timeout: timeout)
+
+        XCTAssertNotNil(listResponse?.resource)
+
+
+        // Replace
+        let newResourceId = "New\(resourceId)"
+        collection!.replace(triggerWithId: newResourceId, triggerResourceId: resourceId, operation: .create, type: .pre, andBody: "function updateMetadata()") { r in
+            replaceResponse = r
+            self.replaceExpectation.fulfill()
+        }
+
+        wait(for: [replaceExpectation], timeout: timeout)
+
+        XCTAssertNotNil(replaceResponse?.resource)
+
+        // Delete
+        collection!.delete(triggerWithId: newResourceId) { r in
+            deleteResponse = r
+            self.deleteExpectation.fulfill()
+        }
+
+        wait(for: [deleteExpectation], timeout: timeout)
+
+        XCTAssert(deleteResponse?.result.isSuccess ?? false)
+
+    }
 }
